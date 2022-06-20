@@ -24,4 +24,8 @@ Route::group([
         Route::get('user', [AuthController::class, 'user']);
         Route::post('refresh', [AuthController::class, 'refresh']);
         Route::post('logout', [AuthController::class, 'logout']);
+        Route::post('sendPasswordResetLink', 'App\Http\Controllers\PasswordResetRequestController@sendEmail');
+        Route::post('resetPassword', 'App\Http\Controllers\ChangePasswordController@passwordResetProcess');
 });
+
+Route::post('sendEmail', 'App\Http\Controllers\MailController@sendEmail');

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use Symfony\Component\HttpFoundation\Response;
 use App\Models\User;
 use App\Mail\SendMailreset;
@@ -14,22 +13,22 @@ use Illuminate\Support\Str;
 
 class PasswordResetRequestController extends Controller
 {
-    public function sendEmail(Request $request)  // this is most important function to send mail and inside of that there are another function
+    public function sendEmail(Request $request)  // Función principal
     {
-        if (!$this->validateEmail($request->email)) {  // this is validate to fail send mail or true
+        if (!$this->validateEmail($request->email)) {  // Valida el email
             return $this->failedResponse();
         }
-        $this->send($request->email);  //this is a function to send mail 
+        $this->send($request->email);  //Envia el Email
         return $this->successResponse();
     }
 
-    public function send($email)  //this is a function to send mail 
+    public function send($email)  //Función que envia el email
     {
         $token = $this->createToken($email);
-        Mail::to($email)->send(new SendMailreset($token, $email));  // token is important in send mail 
+        Mail::to($email)->send(new SendMailreset($token, $email));  // Envia el email con el token
     }
 
-    public function createToken($email)  // this is a function to get your request email that there are or not to send mail
+    public function createToken($email)  // Verifica si se hizo la solicitud de reinicio de clave
     {
         $oldToken = DB::table('password_resets')->where('email', $email)->first();
 
@@ -42,8 +41,7 @@ class PasswordResetRequestController extends Controller
         return $token;
     }
 
-
-    public function saveToken($token, $email)  // this function save new password
+    public function saveToken($token, $email)  // Función para crear el nuevo token
     {
         DB::table('password_resets')->insert([
             'email' => $email,
@@ -52,9 +50,7 @@ class PasswordResetRequestController extends Controller
         ]);
     }
 
-
-
-    public function validateEmail($email)  //this is a function to get your email from database
+    public function validateEmail($email)  //Función para obtener el email de la base de datos
     {
         return !!User::where('email', $email)->first();
     }
@@ -62,14 +58,14 @@ class PasswordResetRequestController extends Controller
     public function failedResponse()
     {
         return response()->json([
-            'error' => 'Email does\'t found on our database'
+            'error' => 'Email o se encuentra en nuestra base de datos'
         ], Response::HTTP_NOT_FOUND);
     }
 
     public function successResponse()
     {
         return response()->json([
-            'data' => 'Reset Email is send successfully, please check your inbox.'
+            'data' => 'El Email de reinicio de contraseña se envió satisfactoriamente, por favor revise su bandeja de entrada.'
         ], Response::HTTP_OK);
     }
 }

@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ChangePasswordController;
+use App\Http\Controllers\PasswordResetRequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,8 +26,8 @@ Route::group([
         Route::get('user', [AuthController::class, 'user']);
         Route::post('refresh', [AuthController::class, 'refresh']);
         Route::post('logout', [AuthController::class, 'logout']);
-        Route::post('sendPasswordResetLink', 'App\Http\Controllers\PasswordResetRequestController@sendEmail');
-        Route::post('resetPassword', 'App\Http\Controllers\ChangePasswordController@passwordResetProcess');
+        Route::post('sendPasswordResetLink', [PasswordResetRequestController::class, 'sendEmail']);
+        Route::post('resetPassword', [ChangePasswordController::class, 'passwordResetProcess']);
 });
 
 Route::post('sendEmail', 'App\Http\Controllers\MailController@sendEmail');

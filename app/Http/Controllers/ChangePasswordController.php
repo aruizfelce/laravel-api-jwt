@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Http\Requests\UpdatePasswordRequest;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +14,7 @@ class ChangePasswordController extends Controller
         return $this->updatePasswordRow($request)->count() > 0 ? $this->resetPassword($request) : $this->tokenNotFoundError();
       }
   
-      // Verify if token is valid
+      // Verifica si el token es válido
       private function updatePasswordRow($request){
          return DB::table('password_resets')->where([
              'email' => $request->email,
@@ -23,27 +22,27 @@ class ChangePasswordController extends Controller
          ]);
       }
   
-      // Token not found response  
+      // Respuesta si no encuentra el token 
       private function tokenNotFoundError() {
           return response()->json([
-            'error' => 'Either your email or token is wrong.'
+            'error' => 'La información enviada es errónea'
           ],Response::HTTP_UNPROCESSABLE_ENTITY);
       }
   
-      // Reset password
+      // Resetea el password
       private function resetPassword($request) {
-          // find email
+          // Busca el email
           $userData = User::whereEmail($request->email)->first();
-          // update password
+          // Actualiza el password
           $userData->update([
             'password'=>bcrypt($request->password)
           ]);
-          // remove verification data from db
+          // Remueve la data de verificacion de la base de datos
           $this->updatePasswordRow($request)->delete();
   
           // reset password response
           return response()->json([
-            'data'=>'Password has been updated.'
+            'data'=>'El Password ha sido actualizado con éxito.'
           ],Response::HTTP_CREATED);
       }    
 }

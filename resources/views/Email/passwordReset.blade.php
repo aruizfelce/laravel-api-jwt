@@ -1,12 +1,12 @@
 @component('mail::message')
-# Introduction
+# Reinicio de contraseña
 
-The body of your message.
+Ingrese al siguiente link para reiniciar su contraseña
 
 @component('mail::button', ['url' => 'http://localhost:4200/response-password-reset?token='.$token])
-Button Text
+Reinicias contraseña
 @endcomponent
 
-Thanks,<br>
+Gracias,<br>
 {{ config('app.name') }}
 @endcomponent

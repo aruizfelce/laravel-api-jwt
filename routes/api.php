@@ -30,4 +30,6 @@ Route::group([
         Route::post('resetPassword', [ChangePasswordController::class, 'passwordResetProcess']);
 });
 
-Route::post('sendEmail', 'App\Http\Controllers\MailController@sendEmail');
+Route::apiResource('categories', App\Http\Controllers\Api\CategoryController::class)->middleware('api');
+
+// Route::post('sendEmail', 'App\Http\Controllers\MailController@sendEmail');
